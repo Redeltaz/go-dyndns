@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+  builder:
+    container_name: go-dyndns-builder
+    build:
+      context: ./
+      target: builder
+    volumes:
+      - ./bin:/builder/bin
+    command: sh -c "cp go-dyndns ./bin"
+
+  runner:
+    container_name: go-dyndns-runner
+    build:
+      context: ./
+      target: runner 
