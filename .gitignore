@@ -1,2 +1,3 @@
 go-dyndns
 bin
+.env
