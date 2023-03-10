@@ -2,15 +2,11 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 	"log"
-	"os"
-
-	//"fmt"
 	"io"
-	//"log"
 	"net/http"
-	//"os"
+    "strconv"
+
 	"github.com/Redeltaz/go-dyndns/conf"
 	"github.com/Redeltaz/go-dyndns/providers"
 )
@@ -21,35 +17,41 @@ func Root() {
     publicIP, error := getPublicIP()
     if error != nil {
         log.Fatal(*error)
-        os.Exit(1)
     }
 
     config, error := conf.Loadenv()
     if error != nil {
         log.Fatal(*error)
-        os.Exit(1)
     }
 
-    recordIP, error := providers.SwGetIP(config)
+    record, error := providers.SwGetIP(config)
     if error != nil {
         log.Fatal(*error)
-        os.Exit(1)
     }
 
-    fmt.Println(*recordIP == *publicIP)
+    if record.Data != *publicIP {
+        error = providers.SwSetIP(config, publicIP, record)
+        if error != nil {
+            log.Fatal(error)
+        } else {
+            log.Fatal("Public IP successfully changed !")
+        }
+    } else {
+        log.Fatal("Public IP didn't change, no need to update")
+    }
 }
 
 func getPublicIP() (*string, *error) {
     var body string
 
-    res, error := http.Get(publicRequestUrl)
+    response, error := http.Get(publicRequestUrl)
     if error != nil {
        return &body, &error
     }
-    defer res.Body.Close()
+    defer response.Body.Close()
 
-    if res.StatusCode == http.StatusOK {
-        bodyBytes, error := io.ReadAll(res.Body)
+    if response.StatusCode == http.StatusOK {
+        bodyBytes, error := io.ReadAll(response.Body)
         if error != nil {
             return &body, &error
         }
@@ -58,7 +60,7 @@ func getPublicIP() (*string, *error) {
 
         return &body, nil
     } else {
-        error := errors.New("Status code is not ok")
+        error := errors.New("Unknown error during public IP request, status code : " + strconv.Itoa(response.StatusCode))
         return &body, &error
     }
 }

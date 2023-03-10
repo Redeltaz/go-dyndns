@@ -7,7 +7,6 @@ import (
 )
 
 type Config struct {
-    AccessKey string
     SecretKey string
     DomainName string
     SubdomainName string
@@ -21,7 +20,6 @@ func Loadenv() (*Config, *error) {
         return config, &error
     }
 
-    config.AccessKey = os.Getenv("SW_ACCESS_KEY")
     config.SecretKey = os.Getenv("SW_SECRET_KEY")
     config.DomainName = os.Getenv("DOMAIN_NAME")
     config.SubdomainName = os.Getenv("SUBDOMAIN_NAME")
