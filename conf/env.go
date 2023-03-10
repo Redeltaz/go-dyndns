@@ -7,22 +7,22 @@ import (
 )
 
 type Config struct {
-    SecretKey string
-    DomainName string
-    SubdomainName string
+	SecretKey     string `env:"SW_SECRET_KEY"`
+	DomainName    string `env:"DOMAIN_NAME"`
+	SubdomainName string `env:"SUBDOMAIN_NAME"`
 }
 
 func Loadenv() (*Config, *error) {
-    var config = &Config{}
+	var config = &Config{}
 
-    error := godotenv.Load(".env")
-    if error != nil {
-        return config, &error
-    }
+	error := godotenv.Load(".env")
+	if error != nil {
+		return config, &error
+	}
 
-    config.SecretKey = os.Getenv("SW_SECRET_KEY")
-    config.DomainName = os.Getenv("DOMAIN_NAME")
-    config.SubdomainName = os.Getenv("SUBDOMAIN_NAME")
+	config.SecretKey = os.Getenv("SW_SECRET_KEY")
+	config.DomainName = os.Getenv("DOMAIN_NAME")
+	config.SubdomainName = os.Getenv("SUBDOMAIN_NAME")
 
-    return config, nil
+	return config, nil
 }
