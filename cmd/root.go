@@ -30,7 +30,7 @@ func Root() {
 	}
 
 	if record.Data != *publicIP {
-		error = providers.SwSetIP(config, publicIP, record)
+		error := providers.SwSetIP(config, publicIP, record)
 		if error != nil {
 			log.Fatal(error)
 		} else {
