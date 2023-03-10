@@ -7,20 +7,22 @@ import (
 )
 
 type Config struct {
-    accessKey string
-    secretKey string
+    AccessKey string
+    SecretKey string
+    DomainName string
 }
 
 func Loadenv() (*Config, *error) {
-    var config = Config{}
+    var config = &Config{}
 
     error := godotenv.Load(".env")
     if error != nil {
-        return &config, &error
+        return config, &error
     }
 
-    config.accessKey = os.Getenv("SW_ACCESS_KEY")
-    config.secretKey = os.Getenv("SW_SECRET_KEY")
+    config.AccessKey = os.Getenv("SW_ACCESS_KEY")
+    config.SecretKey = os.Getenv("SW_SECRET_KEY")
+    config.DomainName = os.Getenv("DOMAIN_NAME")
 
-    return &config, nil
+    return config, nil
 }

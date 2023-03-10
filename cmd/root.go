@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 
@@ -12,6 +11,7 @@ import (
 	"net/http"
 	//"os"
 	"github.com/Redeltaz/go-dyndns/conf"
+	"github.com/Redeltaz/go-dyndns/providers"
 )
 
 const publicRequestUrl string = "https://api.ipify.org"
@@ -28,6 +28,8 @@ func Root() {
         log.Fatal(*error)
         os.Exit(1)
     }
+
+    providers.SwGetIP(config)
 }
 
 func getPublicIP() (*string, *error) {
