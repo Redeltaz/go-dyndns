@@ -12,6 +12,15 @@ services:
 
   runner:
     container_name: go-dyndns-runner
+    restart: unless-stopped
     build:
       context: ./
       target: runner 
+      args:
+        SCHEDULER_CRON: ${SCHEDULER_CRON:-*/5 * * * *}
+    environment:
+      SW_SECRET_KEY: ${SW_SECRET_KEY}
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      SUBDOMAIN_NAME: ${SUBDOMAIN_NAME}
+    volumes:
+      - /var/log/go-dyndns/:/var/log/go-dyndns/
