@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -17,11 +18,11 @@ import (
 const publicRequestUrl string = "https://api.ipify.org"
 
 func Root() {
-    //publicIP, error := getPublicIP()
-    //if error != nil {
-        //log.Fatal(*error)
-        //os.Exit(1)
-    //}
+    publicIP, error := getPublicIP()
+    if error != nil {
+        log.Fatal(*error)
+        os.Exit(1)
+    }
 
     config, error := conf.Loadenv()
     if error != nil {
@@ -29,7 +30,13 @@ func Root() {
         os.Exit(1)
     }
 
-    providers.SwGetIP(config)
+    recordIP, error := providers.SwGetIP(config)
+    if error != nil {
+        log.Fatal(*error)
+        os.Exit(1)
+    }
+
+    fmt.Println(*recordIP == *publicIP)
 }
 
 func getPublicIP() (*string, *error) {
