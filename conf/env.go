@@ -15,14 +15,14 @@ type Config struct {
 func Loadenv() (*Config, *error) {
 	var config = &Config{}
 
-    _, err := os.Stat(".env")
+	_, err := os.Stat(".env")
 
-    if !os.IsNotExist(err) {
-	    error := godotenv.Load(".env")
-        if error != nil {
-            return config, &error
-        }
-    }
+	if !os.IsNotExist(err) {
+		error := godotenv.Load(".env")
+		if error != nil {
+			return config, &error
+		}
+	}
 
 	config.SecretKey = os.Getenv("SW_SECRET_KEY")
 	config.DomainName = os.Getenv("DOMAIN_NAME")
